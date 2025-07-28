@@ -21,15 +21,19 @@ export default defineConfig({
             S.divider(),
             S.listItem()
               .title('Event')
-              .schemaType('event')
-              .child(S.documentTypeList('football').title('Football')),
-            S.listItem()
-              .title('Team')
-              .schemaType('team')
-              .child(S.documentTypeList('team').title('Team Members')),
+              .child(
+                S.documentTypeList('category')
+                  .title('Event Categories')
+                  .child((categoryId) =>
+                    S.documentList()
+                      .title('Events')
+                      .filter('_type == "event" && eventCategory._ref == $categoryId')
+                      .params({categoryId}),
+                  ),
+              ),
+            S.listItem().title('Team').child(S.documentTypeList('team').title('Team Members')),
             S.listItem()
               .title('Category')
-              .schemaType('category')
               .child(S.documentTypeList('category').title('Categories')),
           ])
       },
