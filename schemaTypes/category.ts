@@ -4,10 +4,9 @@ export const category = defineType({
   name: 'category',
   title: 'Category',
   type: 'document',
-  icon: () => '📂',
   fields: [
     defineField({
-      name: 'name',
+      name: 'title',
       title: 'Category Name',
       type: 'string',
       validation: (rule) => rule.required(),
@@ -16,7 +15,7 @@ export const category = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'name', maxLength: 96},
+      options: {source: 'title', maxLength: 96},
       validation: (rule) => rule.required(),
     }),
     defineField({

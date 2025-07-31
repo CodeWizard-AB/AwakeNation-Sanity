@@ -1,6 +1,7 @@
 import {category} from './category'
 import {event} from './event'
-import {football} from './football'
+import {eventType} from './eventType'
+import {registration} from './registration'
 import {team} from './team'
 
-export const schemaTypes = [event, football, team, category]
+export const schemaTypes = [team, category, event, eventType, registration]

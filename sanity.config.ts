@@ -11,34 +11,60 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
+    visionTool(),
     structureTool({
-      name: 'studio',
-      title: 'Studio',
-      structure(S) {
-        return S.list()
-          .title('Documents')
+      structure: (S) =>
+        S.list()
+          .title('Content')
           .items([
-            S.divider(),
             S.listItem()
               .title('Event')
               .child(
                 S.documentTypeList('category')
                   .title('Event Categories')
                   .child((categoryId) =>
-                    S.documentList()
-                      .title('Events')
-                      .filter('_type == "event" && eventCategory._ref == $categoryId')
+                    S.documentTypeList('event')
+                      .title('Events by Category')
+                      .filter(`type == event && category._ref == $categoryId`)
                       .params({categoryId}),
                   ),
               ),
-            S.listItem().title('Team').child(S.documentTypeList('team').title('Team Members')),
             S.listItem()
-              .title('Category')
-              .child(S.documentTypeList('category').title('Categories')),
-          ])
-      },
+              .title('Event Type')
+              .child(
+                S.documentTypeList('category')
+                  .title('Event Categories')
+                  .child((categoryId) =>
+                    S.documentTypeList('eventType')
+                      .title('Event Types by Category')
+                      .filter(`type == eventType && category._ref == $categoryId`)
+                      .params({categoryId}),
+                  ),
+              ),
+            S.listItem()
+              .title('Registration')
+              .child(
+                S.documentTypeList('category')
+                  .title('Registrations by Category')
+                  .child((categoryId) =>
+                    S.documentList()
+                      .title('Events in Category')
+                      .filter('_type == "event" && category._ref == $categoryId')
+                      .params({categoryId})
+
+                      .child((eventId) =>
+                        S.documentList()
+                          .title('Registrations for Event')
+                          .filter('_type == "registration" && event._ref == $eventId')
+                          .params({eventId}),
+                      ),
+                  ),
+              ),
+            ...S.documentTypeListItems().filter(
+              (listItem) => !['event', 'eventType', 'registration'].includes(listItem.getId()!),
+            ),
+          ]),
     }),
-    visionTool(),
   ],
 
   schema: {types: schemaTypes},
