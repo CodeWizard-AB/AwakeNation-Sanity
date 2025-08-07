@@ -18,6 +18,12 @@ export const team = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'bio',
+      title: 'Bio',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'email',
       title: 'Email',
       type: 'string',
