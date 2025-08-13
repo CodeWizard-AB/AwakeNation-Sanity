@@ -15,7 +15,9 @@ export const registration = defineType({
     defineField({
       name: 'submittedAt',
       title: 'Submitted At',
-      type: 'datetime',
+      type: 'date',
+      readOnly: true,
+      initialValue: new Date().toISOString(),
     }),
     defineField({
       name: 'registrationData',
@@ -29,34 +31,22 @@ export const registration = defineType({
           readOnly: true,
           hidden: true,
         }),
-        defineField({
-          name: 'participantName',
-          title: 'Participant Name',
-          type: 'string',
-          description: 'Full name of the person registering.',
-          validation: (rule) => rule.required(),
-        }),
-        defineField({
-          name: 'participantEmail',
-          title: 'Participant Email',
-          type: 'email',
-          description: 'Email address of the participant.',
-          validation: (rule) => rule.required(),
-        }),
       ],
-      validation: (rule) => rule.required(),
+      options: {
+        collapsible: true,
+        collapsed: false,
+      },
     }),
   ],
   preview: {
     select: {
-      title: 'registrationData.participantName',
-      subtitle: 'event.title',
+      title: 'registrationData.teamName',
       date: 'submittedAt',
     },
-    prepare({title, subtitle, date}) {
+    prepare({title, date}) {
       return {
         title: title || 'Unnamed Registration',
-        subtitle: `${subtitle || 'No Event'} - ${date ? new Date(date).toLocaleDateString() : 'No Date'}`,
+        subtitle: `${date ? new Date(date).toLocaleDateString() : 'No Date'}`,
       }
     },
   },
